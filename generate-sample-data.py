@@ -6,16 +6,19 @@ import sys
 import getopt 
 import moogsoft
 
-print (sys.argv[0],sys.argv[1])
+print (sys.argv[0], sys.argv[1])
 
 api_key = sys.argv[1]
-severity = int(sys.argv[2])
+
+## read config settigns
+set_description = moogsoft.myhost["set_description"]
+set_severity = moogsoft.myhost["set_severity"]
 
 # Set the webhook_url
 webhook_url = 'https://api.moogsoft.ai/v1/integrations/events'
 moogsoft_data = {
-    "description": "CPU spike to 75%",
-    "severity":  severity,
+    "description": set_description,
+    "severity":  set_severity,
     "source": "www.your-source.com",
     "check": "cpu",
     "service": [
@@ -32,7 +35,11 @@ response = requests.post(
     headers={'Content-Type': 'application/json', 'apikey': api_key}
 )
 
-print (response.status_code, response.text, api_key, severity)
+print (response.status_code, 
+	response.text, 
+	api_key, 
+	set_description, 
+	set_severity)
 
 #if response.status_code != 200:
 #    raise ValueError(
