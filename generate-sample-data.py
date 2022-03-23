@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+## args choices https://realpython.com/comparing-python-command-line-parsing-libraries-argparse-docopt-click/
+
 import json
 import requests
 import sys
@@ -26,7 +28,8 @@ moogsoft_data = {
         "support"
     ],
     "tags": {
-        "key": "value"
+        "key": "value",
+        "location_code": "TXPLANB1F1"
     }
 }
 
