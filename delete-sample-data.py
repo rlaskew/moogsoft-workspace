@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-## args choices https://realpython.com/comparing-python-command-line-parsing-libraries-argparse-docopt-click/
-
+# from https://api.docs.moogsoft.com/reference/search
 import json
 import requests
 import sys
@@ -14,28 +13,16 @@ api_key = sys.argv[1]
 
 ## read config settigns
 set_description = moogsoft.myhost["set_description"]
-set_severity = moogsoft.myhost["set_severity"]
 demo_namespace = moogsoft.config_data["demo_namespace"]
 
 # Set the webhook_url
-webhook_url = 'https://api.moogsoft.ai/v1/integrations/events'
+#webhook_url = 'https://api.moogsoft.ai/v1/alerts-search' + '?namespace=moogsoft-demo'
+webhook_url = 'https://api.moogsoft.ai/v1/alerts-search' + '?namespace=' + demo_namespace
 moogsoft_data = {
-    "description": set_description,
-    "severity":  set_severity,
-    "source": "www.your-source.com",
-    "check": "cpu",
-    "namespace": demo_namespace,
-    "service": [
-        "retail",
-        "support"
-    ],
-    "tags": {
-        "key": "value",
-        "location_code": "TXPLANB1F1"
-    }
+    "search.namespace": "moogsoft-demo"
 }
 
-response = requests.post(
+response = requests.get(
     webhook_url, data=json.dumps(moogsoft_data),
     headers={'Content-Type': 'application/json', 'apikey': api_key}
 )
@@ -43,8 +30,12 @@ response = requests.post(
 print (response.status_code, 
 	response.text, 
 	api_key, 
-	set_description, 
-	set_severity)
+	set_description)
+
+response_json = json.loads(response.text)
+alerts_to_delete = response_json["data"]
+for x in alerts_to_delete:
+  print (x)
 
 #if response.status_code != 200:
 #    raise ValueError(
