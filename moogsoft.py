@@ -9,9 +9,10 @@ config_data = {
 
 myhost = {
    "hostname": "txplanserver1"
-   ,"set_duration": 150
+   ,"set_duration": 10
    ,"set_severity": 5
    ,"set_description": "txplanserver1 is down"
    ,"clear_duration": 30
    ,"clear_severity": 0
+   ,"iterations": 5
 }

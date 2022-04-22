@@ -8,6 +8,13 @@ import sys
 import getopt 
 import moogsoft
 
+def post_to_events_api(event_webhook_url, json_data, moogsoft_api_key):
+  response = requests.post(
+      event_webhook_url, data=json.dumps(json_data),
+      headers={'Content-Type': 'application/json', 'apikey': moogsoft_api_key}
+  )
+  return (response.status_code, response.text)
+
 print (sys.argv[0], sys.argv[1])
 
 api_key = sys.argv[1]
@@ -15,6 +22,7 @@ api_key = sys.argv[1]
 ## read config settigns
 set_description = moogsoft.myhost["set_description"]
 set_severity = moogsoft.myhost["set_severity"]
+clear_severity = moogsoft.myhost["clear_severity"]
 demo_namespace = moogsoft.config_data["demo_namespace"]
 
 # Set the webhook_url
@@ -35,16 +43,18 @@ moogsoft_data = {
     }
 }
 
-response = requests.post(
-    webhook_url, data=json.dumps(moogsoft_data),
-    headers={'Content-Type': 'application/json', 'apikey': api_key}
-)
+(rStatus, rText) = post_to_events_api( webhook_url,
+                    moogsoft_data,
+                    api_key)
 
-print (response.status_code, 
-	response.text, 
-	api_key, 
-	set_description, 
-	set_severity)
+print (rStatus, rText, api_key, set_description, moogsoft_data["severity"])
+
+moogsoft_data["severity"] = clear_severity 
+(rStatus, rText) = post_to_events_api( webhook_url,
+                    moogsoft_data,
+                    api_key)
+
+print (rStatus, rText, api_key, set_description, moogsoft_data["severity"])
 
 #if response.status_code != 200:
 #    raise ValueError(
