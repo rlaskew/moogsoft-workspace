@@ -14,5 +14,5 @@ myhost = {
    ,"set_description": "txplanserver1 is down"
    ,"clear_duration": 30
    ,"clear_severity": 0
-   ,"set_iterations": 5
+   ,"set_iterations": 1
 }

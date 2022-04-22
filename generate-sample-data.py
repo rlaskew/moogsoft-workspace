@@ -8,6 +8,7 @@ import sys
 import getopt 
 import moogsoft
 import time
+import logging
 
 def post_to_events_api(event_webhook_url, json_data, moogsoft_api_key):
   response = requests.post(
@@ -15,6 +16,9 @@ def post_to_events_api(event_webhook_url, json_data, moogsoft_api_key):
       headers={'Content-Type': 'application/json', 'apikey': moogsoft_api_key}
   )
   return (response.status_code, response.text)
+
+#logging.basicConfig(filename='debug.log', level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 
 print (sys.argv[0], sys.argv[1])
 
@@ -46,14 +50,17 @@ moogsoft_data = {
     }
 }
 
-for i in range(1,set_iterations):
-    #print (str(i))
+logging.debug("Starting generating sets now...")
+for i in range(1,set_iterations+1):
+    print (str(i))
     (rStatus, rText) = post_to_events_api( webhook_url,
                        moogsoft_data,
                       api_key)
     print (rStatus, rText, api_key, set_description, moogsoft_data["severity"])
+    logging.debug("Waiting 3 seconds before generating next set...")
     time.sleep(set_duration)
 
+logging.debug("Waiting 3 seconds before generating clear...")
 time.sleep(3)
 moogsoft_data["severity"] = clear_severity 
 (rStatus, rText) = post_to_events_api( webhook_url,
