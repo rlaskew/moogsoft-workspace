@@ -4,15 +4,15 @@
 import preprocessing
 
 config_data = { 
-     "demo_namespace": "moogsoft_demo"
+     "demo_namespace": "April_22_2022"
 }
 
 myhost = {
    "hostname": "txplanserver1"
-   ,"set_duration": 10
+   ,"set_duration": 2
    ,"set_severity": 5
    ,"set_description": "txplanserver1 is down"
    ,"clear_duration": 30
    ,"clear_severity": 0
-   ,"iterations": 5
+   ,"set_iterations": 5
 }
